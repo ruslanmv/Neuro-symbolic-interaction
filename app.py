@@ -72,5 +72,5 @@ with gr.Blocks(title="Engine Failure Evaluation") as demo:
     example_dropdown = gr.Dropdown(choices=test_statements, label="Select an example statement", interactive=True)
     example_dropdown.change(update_textbox, example_dropdown, chat_input)
 
-demo.launch(debug=True, share=False, server_name="0.0.0.0")
+demo.launch(debug=True, share=True, server_name="0.0.0.0")
 
