@@ -1,0 +1,85 @@
+<?xml version="1.0"?>
+<rdf:RDF xmlns:rdf="http://www.w3.org/1999/02/22-rdf-syntax-ns#"
+         xmlns:xsd="http://www.w3.org/2001/XMLSchema#"
+         xmlns:rdfs="http://www.w3.org/2000/01/rdf-schema#"
+         xmlns:owl="http://www.w3.org/2002/07/owl#"
+         xml:base="http://example.org/engine_ontology.owl"
+         xmlns="http://example.org/engine_ontology.owl#">
+
+<owl:Ontology rdf:about="http://example.org/engine_ontology.owl"/>
+
+<owl:ObjectProperty rdf:about="#CausesFailure">
+  <rdfs:domain rdf:resource="#EngineComponent"/>
+  <rdfs:range rdf:resource="#Engine"/>
+</owl:ObjectProperty>
+
+<owl:Class rdf:about="#Engine">
+  <rdfs:subClassOf rdf:resource="http://www.w3.org/2002/07/owl#Thing"/>
+</owl:Class>
+
+<owl:Class rdf:about="#OilEngine">
+  <rdfs:subClassOf rdf:resource="#Engine"/>
+</owl:Class>
+
+<owl:Class rdf:about="#ElectricEngine">
+  <rdfs:subClassOf rdf:resource="#Engine"/>
+</owl:Class>
+
+<owl:Class rdf:about="#EngineComponent">
+  <rdfs:subClassOf rdf:resource="http://www.w3.org/2002/07/owl#Thing"/>
+</owl:Class>
+
+<owl:Class rdf:about="#OilEngineComponent">
+  <rdfs:subClassOf rdf:resource="#EngineComponent"/>
+</owl:Class>
+
+<owl:Class rdf:about="#ElectricEngineComponent">
+  <rdfs:subClassOf rdf:resource="#EngineComponent"/>
+</owl:Class>
+
+<owl:Class rdf:about="#Piston">
+  <rdfs:subClassOf rdf:resource="#OilEngineComponent"/>
+</owl:Class>
+
+<owl:Class rdf:about="#OilPump">
+  <rdfs:subClassOf rdf:resource="#OilEngineComponent"/>
+</owl:Class>
+
+<owl:Class rdf:about="#Battery">
+  <rdfs:subClassOf rdf:resource="#ElectricEngineComponent"/>
+</owl:Class>
+
+<owl:Class rdf:about="#Motor">
+  <rdfs:subClassOf rdf:resource="#ElectricEngineComponent"/>
+</owl:Class>
+
+<owl:NamedIndividual rdf:about="#piston_1">
+  <rdf:type rdf:resource="#Piston"/>
+  <CausesFailure rdf:resource="#oil_engine_1"/>
+</owl:NamedIndividual>
+
+<owl:NamedIndividual rdf:about="#oil_pump_1">
+  <rdf:type rdf:resource="#OilPump"/>
+  <CausesFailure rdf:resource="#oil_engine_1"/>
+</owl:NamedIndividual>
+
+<owl:NamedIndividual rdf:about="#battery_1">
+  <rdf:type rdf:resource="#Battery"/>
+  <CausesFailure rdf:resource="#electric_engine_1"/>
+</owl:NamedIndividual>
+
+<owl:NamedIndividual rdf:about="#motor_1">
+  <rdf:type rdf:resource="#Motor"/>
+  <CausesFailure rdf:resource="#electric_engine_1"/>
+</owl:NamedIndividual>
+
+<owl:NamedIndividual rdf:about="#oil_engine_1">
+  <rdf:type rdf:resource="#OilEngine"/>
+</owl:NamedIndividual>
+
+<owl:NamedIndividual rdf:about="#electric_engine_1">
+  <rdf:type rdf:resource="#ElectricEngine"/>
+</owl:NamedIndividual>
+
+
+</rdf:RDF>
