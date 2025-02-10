@@ -265,7 +265,7 @@ zipp==3.19.2
 
 
 nltk
-rouge_score-0.1.2
+rouge-score
 python-dotenv
 owlready2
 langchain_ibm
