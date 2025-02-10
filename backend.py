@@ -9,11 +9,36 @@ from langchain_ibm import WatsonxLLM
 from langchain.prompts import PromptTemplate
 from pydantic import BaseModel
 import os
-os.environ['PATH'] = r'C:\Program Files\Common Files\Oracle\Java\javapath' + ';' + os.environ['PATH']
+from dotenv import load_dotenv
 default=True
-# Load environment variables
-load_dotenv()
+# Check if in Google Colab
+try:
+    import google.colab
+    in_colab = True
+except ImportError:
+    in_colab = False
 
+if in_colab:
+    # Get Watsonx credentials from Google Colab userdata
+    from google.colab import userdata
+    api_key = userdata.get('WATSONX_API_KEY')
+    project_id = userdata.get('PROJECT_ID')
+    url = userdata.get('WATSONX_URL')
+
+    # Java path in Colab (no action needed, assumed to be set)
+else: # Not in Google Colab
+    load_dotenv() # Load from .env file
+
+    # Get Watsonx credentials from .env file
+    api_key = os.getenv("WATSONX_API_KEY")
+    project_id = os.getenv("PROJECT_ID")
+    url = os.getenv("WATSONX_URL")
+
+    # Java Path handling outside Colab
+    if os.name == 'nt': # Check if Windows
+        java_path = r'C:\Program Files\Common Files\Oracle\Java\javapath'
+        os.environ['PATH'] = java_path + ';' + os.environ.get('PATH', '') # Prepend and ensure existing PATH is kept
+    # else: # Not Windows (e.g., Linux, macOS) - assume standard Java path is sufficient
 # Function to set environment variables
 def set_env(var: str):
     env_var = os.getenv(var)
@@ -21,7 +46,6 @@ def set_env(var: str):
         env_var = getpass(f"{var}: ")
         os.environ[var] = env_var
     return env_var
-
 # Define IBM connection parameters
 class IbmConnectionParams(BaseModel):
     api_key: str
@@ -31,17 +55,6 @@ class IbmConnectionParams(BaseModel):
 
     def __init__(self, api_key: str, project_id: str, url: str) -> None:
         super().__init__(api_key=api_key, project_id=project_id, url=url, credentials={"url": url, "apikey": api_key})
-
-from dotenv import load_dotenv
-import os
-
-# Load environment variables from .env file
-load_dotenv()
-
-# IBM Connection Parameters (using loaded env variables)
-api_key = os.getenv("WATSONX_API_KEY")
-project_id = os.getenv("PROJECT_ID")
-url = os.getenv("WATSONX_URL")
 
 # Define parameters for the model
 parameters = {
