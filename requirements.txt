@@ -269,3 +269,4 @@ rouge_score-0.1.2
 python-dotenv
 owlready2
 langchain_ibm
+gradio
