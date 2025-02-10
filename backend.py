@@ -799,7 +799,7 @@ import json
 import re
 
 # Function to handle evaluation and response generation with ontology, returns structured JSON
-def handle_evaluation_with_ontology(user_input, statement, ontology_path=None):
+def handle_evaluation_with_ontology_llama70b(user_input, statement, ontology_path=None):
     print("handle_evaluation_with_ontology")
     # Use the default ontology if no custom ontology is provided
     if ontology_path is None:
@@ -930,6 +930,143 @@ def handle_evaluation_with_ontology(user_input, statement, ontology_path=None):
 
         return json.dumps(output)
 
+# -----------------------------------------------------------------------
+# Revised function using clearer prompts for True or False statements
+# -----------------------------------------------------------------------
+def handle_evaluation_with_ontology(user_input, statement, ontology_path=None):
+    print("handle_evaluation_with_ontology")
+    
+    # Use default ontology if none provided
+    if ontology_path is None:
+        ontology_path = "engine_ontology.owl"  # Default path
+
+    # Load the ontology + supporting components
+    onto, model, vectorizer = main(ontology_path)
+    
+    # Convert user statement to a logical form
+    logical_form = convert_to_logical(statement, model, vectorizer)
+    
+    # Evaluate statement truth
+    result, reason = check_statement_with_details(onto, logical_form)
+    
+    # Summarize evaluation
+    evaluation_results = generate_evaluation_results(statement, logical_form, result, reason)
+    
+    # Get textual ontology info
+    ontology_info = get_ontology_info(onto)
+
+    # Build context for the LLM
+    llm_context = f"""
+User input:
+{user_input}
+
+Ontology input:
+{ontology_info}
+
+{evaluation_results}
+"""
+
+    if result:
+        # ------------------ True statement ------------------ #
+        print("---- True Statement ----")
+        print("evaluation_results:", evaluation_results)
+
+        # More explicit instructions for True case
+        prompt_template = """
+You are a helpful AI assistant with knowledge of the provided ontology.
+
+The input statement was determined to be TRUE.
+
+{context}
+
+Task:
+Please provide statements and logical statements (and a short explanation) that directly answer the user input based on the given ontology context. 
+Use the following format exactly (without additional commentary):
+
+Statements:
+<Your statements here, e.g. "Piston causes failure of oil engine.">
+
+Logical statements:
+<Your logical statements here, e.g. "piston_1.CausesFailure(oil_engine_1)">
+
+Explanation:
+<Short explanation here>
+"""
+
+        # Fill the prompt
+        prompt = PromptTemplate(input_variables=["context"], template=prompt_template)
+        filled_prompt = prompt.format(context=llm_context)
+        print("------------ Prompt to LLM for True Statement -----------")
+        print(filled_prompt)
+        
+        # Query your LLM
+        response = ask_watsonx(filled_prompt)
+        
+        print("Response LLM",response)
+
+        # Parse the LLM response
+        statements, logical_statements = parse_response(response)
+
+        # Prepare final JSON
+        statements_str = '\n'.join(statements).strip() if statements else ''
+        logical_statements_str = '\n'.join(logical_statements).strip() if logical_statements else ''
+
+        output = {
+            'statements': statements_str,
+            'details': "Logical Statements (Relationships between instances): \n" + logical_statements_str
+        }
+        return json.dumps(output)
+
+    else:
+        # ------------------ False statement ------------------ #
+        print("---- False Statement ----")
+        print("evaluation_results:", evaluation_results)
+
+        # More explicit instructions for False case
+        prompt_template = """
+You are a helpful AI assistant with knowledge of the provided ontology.
+
+The input statement was determined to be FALSE.
+
+{context}
+
+Task:
+Please provide the new correct statements and logical statements that answer the user input based on the ontology context. 
+Use the following format exactly (without extra commentary).  
+If there are multiple correct statements, you can list them all, but keep them short:
+
+Statements:
+<Your statements here, e.g. "Oil pump causes failure of oil engine.">
+
+Logical statements:
+<Your logical statements here, e.g. "oil_pump_1.CausesFailure(oil_engine_1)">
+
+Explanation:
+<Short explanation here>
+"""
+
+        # Fill the prompt
+        prompt = PromptTemplate(input_variables=["context"], template=prompt_template)
+        filled_prompt = prompt.format(context=llm_context)
+        print("------------ Prompt to LLM for False Statement -----------")
+        print(filled_prompt)
+        
+        # Query your LLM
+        response = ask_watsonx(filled_prompt)
+        print("LLM response:", response)
+        
+        # Parse the LLM response
+        statements, logical_statements = parse_response(response)
+
+        # Prepare final JSON
+        statements_str = '\n'.join(statements).strip() if statements else ''
+        logical_statements_str = '\n'.join(logical_statements).strip() if logical_statements else ''
+
+        output = {
+            'statements': statements_str,
+            'details': "Logical Statements (Relationships between instances): \n" + logical_statements_str
+        }
+        return json.dumps(output)
 
 
 # Function to handle evaluation and response generation without ontology
