@@ -259,9 +259,13 @@ y-py==0.6.2
 yapf==0.40.2
 yarl==1.9.4
 yaspin==3.0.2
+
 ypy-websocket==0.8.4
 zipp==3.19.2
 
 
 nltk
 rouge_score-0.1.2
+python-dotenv
+owlready2
+langchain_ibm
