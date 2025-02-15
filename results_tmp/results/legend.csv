@@ -1,0 +1,18 @@
+Merge Key,Query
+1,Which components cause failure in electric engines?
+2,What is the failure probability of the piston?
+3,What are the subclasses of engines described in the ontology?
+4,Is the radiator monitored by a sensor?
+5,Does battery_1 cause failure in electric_engine_1?
+6,What causes piston failure in oil engines?
+7,Why does a motor cause electric engine failure?
+8,Which engines require regular maintenance?
+9,Which components are monitored by sensors?
+10,What is meant by 'FailureMode'?
+11,How can the condition of a piston in an oil engine be monitored and assessed?
+12,What factors contribute to the increased risk of piston failure in oil engines?
+13,Does the electric engine cause failure in the piston?
+14,Is the oil engine a subclass of electric engine?
+15,Why would an oil pump cause an electric engine to fail?
+16,Why would a battery cause an oil engine to fail?
+17,Why would a motor cause an oil engine to fail?
