@@ -2,5 +2,6 @@ nltk
 #rouge-score
 python-dotenv
 owlready2
+langchain
 langchain_ibm
 gradio
