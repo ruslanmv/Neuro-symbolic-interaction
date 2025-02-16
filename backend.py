@@ -1108,7 +1108,7 @@ def handle_evaluation_without_ontology_old(statement):
     print("------------prompt to WatsonX without Ontology-----------", filled_prompt)
     response = ask_watsonx(filled_prompt)
     return response
-def handle_evaluation_without_ontology(statement):
+def handle_evaluation_without_ontology_vecchio(statement):
     print("handle_evaluation_without_ontology") 
     prompt_template = """
     You are a helpful and friendly AI assistant. 
@@ -1140,6 +1140,48 @@ def handle_evaluation_without_ontology(statement):
     
     # Convert the formatted response to a JSON string
     return json.dumps(formatted_response)
+
+def handle_evaluation_without_ontology(statement):
+    print("handle_evaluation_without_ontology") 
+    prompt_template = """
+    You are a helpful and precise AI assistant. Your task is to determine the cause of failures based strictly on the provided context. 
+
+    Instructions:
+    - You must only answer based on the given context.
+    - If a relevant statement exists in the context, respond with that exact statement.
+    - If there is no matching information, respond with: "I don't know" or "I don't have enough information to answer that."
+
+    Context:
+    Statement: Battery causes failure of oil engine.
+    Statement: Oil pump causes failure of electric engine.
+    Statement: Piston causes failure of electric engine.
+    Statement: Piston does not cause failure of oil engine.
+    Statement: Oil pump does not cause failure of oil engine.
+    Statement: Battery does not cause failure of electric engine.
+    Statement: Motor does not cause failure of electric engine.
+
+    User Question:
+    {statement}
+
+    Assistant:
+    """
+    prompt = prompt_template.format(statement=statement)
+    print("------------prompt to WatsonX without Ontology-----------", prompt)
+    
+    # Assuming ask_watsonx returns a plain text response
+    response = ask_watsonx(prompt)  # Example response: "The battery causes failure of the oil engine."
+    
+    # Ensure the response is properly formatted as JSON
+    formatted_response = {
+        "statements": response.strip(),  # Take the LLM's response as the statement
+        "details": ""  # No details when ontology is not used
+    }
+
+    
+    # Convert the formatted response to a JSON string
+    return json.dumps(formatted_response)
+
+
 
 # Unified function to handle evaluation based on ontology flag
 def handle_evaluation_old(statement, use_ontology, ontology_path=None):
