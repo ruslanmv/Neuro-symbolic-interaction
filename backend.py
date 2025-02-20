@@ -1148,21 +1148,18 @@ def handle_evaluation_without_ontology(statement):
 
     Instructions:
     - You must only answer based on the given context.
-    - If a relevant statement exists in the context, respond with that exact statement.
-    - If there is no matching information, respond with: "I don't know" or "I don't have enough information to answer that."
-
+    - Select ONE sentence  from the list below to the user's question.
     Context:
-    Statement: Battery causes failure of oil engine.
-    Statement: Oil pump causes failure of electric engine.
-    Statement: Piston causes failure of electric engine.
-    Statement: Piston does not cause failure of oil engine.
-    Statement: Oil pump does not cause failure of oil engine.
-    Statement: Battery does not cause failure of electric engine.
-    Statement: Motor does not cause failure of electric engine.
+    - Battery causes failure of oil engine.
+    - Oil pump causes failure of electric engine.
+    - Piston causes failure of electric engine.
+    - Piston does not cause failure of oil engine.
+    - Oil pump does not cause failure of oil engine.
+    - Battery does not cause failure of electric engine.
+    - Motor does not cause failure of electric engine.
 
     User Question:
     {statement}
-
     Assistant:
     """
     prompt = prompt_template.format(statement=statement)
