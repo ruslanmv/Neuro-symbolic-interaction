@@ -94,6 +94,58 @@ thread = threading.Thread(target=launch_gradio, args=(demo,))
 thread.start()
 ```
 
+
+
+**Demo**
+
+**Introduction:**
+
+This demonstration showcases the power of neuro-symbolic interaction in a web application. We'll explore how integrating an ontology can correct biases in a Large Language Model (LLM), leading to more accurate and reliable responses.
+
+**Scenario:**
+
+We've intentionally introduced a bias into the LLM, causing it to provide incorrect answers in certain contexts. Our goal is to demonstrate how our neuro-symbolic system, powered by an OWL ontology, effectively rectifies these errors.
+
+**Demo Steps:**
+
+**1. Without Ontology (Biased LLM Response):**
+
+* **Setup:**
+    * The system is initialized without loading any ontology. This means the LLM operates solely on its pre-existing (and biased) knowledge.
+* **Interaction:**
+    * We pose a specific question to the LLM.
+    * The LLM, due to the introduced bias, provides an incorrect answer.
+* **Visual Evidence:**
+    * Here's a screenshot illustrating the biased response:
+    ![](./assets/2025-02-24-14-25-03.png)
+
+
+**2. With Ontology (Corrected LLM Response):**
+
+* **Setup:**
+    * We now activate the neuro-symbolic system and load our OWL ontology. This ontology contains accurate, structured knowledge relevant to the question.
+* **Interaction:**
+    * We ask the same question as before.
+    * The neuro-symbolic system, leveraging the ontology, corrects the LLM's initial response.
+    * The LLM now provides the correct answer, aligned with the ontology's knowledge.
+* **Visual Evidence:**
+    * Here's a screenshot showing the corrected response:
+    ![](./assets/2025-02-24-14-26-01.png)
+
+
+**3. Explanation of Correction (Logical Reasoning):**
+
+* **Feature:**
+    * Our system provides an optional feature to explain why the LLM's initial response was corrected.
+    * This explanation details the logical statements and relationships between instances within the ontology that led to the correct answer.
+* **Interaction:**
+    * We request an explanation for the corrected response.
+    * The system displays the relevant logical statements, demonstrating the reasoning process.
+* **Visual Evidence:**
+    * Here's a screenshot showing the explanation:
+    ![](./assets/2025-02-24-14-26-29.png)
+    
+
 ### Summary
 This repository provides a neuro-symbolic interaction model using IBM Watson and Gradio for user interaction. Follow the steps above to set up and run the application successfully.
 
