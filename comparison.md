@@ -82,4 +82,3 @@ Factual Grounding | Delegated to external service | Grounded in internal ontolog
 4. Scalable — Extendable with new OWL ontologies  
 5. Unified — Neuro and symbolic layers interact bidirectionally  
 
-Let me know if you'd like a poster-style visual, research summary table, or academic write-up version of this comparison!
