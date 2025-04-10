@@ -148,4 +148,8 @@ We've intentionally introduced a bias into the LLM, causing it to provide incorr
 
 ### Summary
 This repository provides a neuro-symbolic interaction model using IBM Watson and Gradio for user interaction. Follow the steps above to set up and run the application successfully.
+# License
+The files in this repository are licensed under the [Apache License 2.0](LICENSE).
 
+# Copyright
+© Copyright IBM Corporation 2024.
