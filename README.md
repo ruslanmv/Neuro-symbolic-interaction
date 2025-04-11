@@ -167,5 +167,4 @@ https://github.com/ruslanmv/rule-based-llms
 ###  License
 The files in this repository are licensed under the [Apache License 2.0](LICENSE).
 
-### Copyright
-© Copyright IBM Corporation 2024.
+
