@@ -6,7 +6,7 @@ It serves as a practical example of how combining neural and symbolic AI approac
 
 The model demonstrates how symbolic reasoning can complement the generative capabilities of LLMs, enabling not just improved factual accuracy, but also transparent, ontology-grounded explanations for its decisions. This fusion of learning-based and rule-based methods opens pathways for more explainable and semantically-aware AI systems.
 
-For a comprehensive description of the methodology and evaluation, please refer to the accompanying paper: [https://arxiv.org/pdf/2504.07640](https://arxiv.org/pdf/2504.07640).
+For a comprehensive description of the methodology and evaluation, please refer to the accompanying paper: [https://arxiv.org/abs/2504.07640](https://arxiv.org/abs/2504.07640).
 
 
 ## Setup Instructions
