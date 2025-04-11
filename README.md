@@ -1,8 +1,13 @@
 # Neuro-symbolic Interaction
 
-This GitHub repository showcases a neuro-symbolic interaction model designed to enhance the accuracy of Large Language Models (LLMs) by integrating knowledge from an OWL ontology. 
+This GitHub repository showcases a neuro-symbolic interaction model designed to enhance the accuracy of Large Language Models (LLMs) by integrating knowledge from an OWL ontology.
 
- It serves as a practical example of how combining neural and symbolic AI approaches can lead to more robust and trustworthy language model outputs, even offering an explanation of the logical reasoning behind the corrections based on the ontology.
+It serves as a practical example of how combining neural and symbolic AI approaches can lead to more robust and trustworthy language model outputs, even offering an explanation of the logical reasoning behind the corrections based on the ontology.
+
+The model demonstrates how symbolic reasoning can complement the generative capabilities of LLMs, enabling not just improved factual accuracy, but also transparent, ontology-grounded explanations for its decisions. This fusion of learning-based and rule-based methods opens pathways for more explainable and semantically-aware AI systems.
+
+For a comprehensive description of the methodology and evaluation, please refer to the accompanying paper: [https://arxiv.org/pdf/2504.07640](https://arxiv.org/pdf/2504.07640).
+
 
 ## Setup Instructions
 
