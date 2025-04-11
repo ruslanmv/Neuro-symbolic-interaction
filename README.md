@@ -164,7 +164,6 @@ An incorporation of this sytems is applied as new feture to the the Decision Mak
 https://github.com/ruslanmv/rule-based-llms
 
 
-###  License
-The files in this repository are licensed under the [Apache License 2.0](LICENSE).
+
 
 
