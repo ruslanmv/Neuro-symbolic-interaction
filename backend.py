@@ -266,24 +266,6 @@ def get_all_elements(onto):
         "individuals": individuals
     }
 
-def evaluate_statement_old(onto, subject_name, property_name, object_name):
-    """
-    Evaluates if a specific logical statement subject.property(object) is true or false in the ontology.
-    """
-    subject = onto.search_one(iri="*#" + subject_name)
-    object_ = onto.search_one(iri="*#" + object_name)
-    property_ = onto.search_one(iri="*#" + property_name)
-
-    # Ensure that the individuals and property exist
-    if not subject or not object_ or not property_:
-        return False
-
-    # Check if the property is an object property
-    if not isinstance(property_, ObjectPropertyClass):
-        return False
-
-    # Check if the logical statement is true (if the object exists in the property of the subject)
-    return object_ in property_[subject]
 
 def evaluate_statement(onto, subject_name, property_name, object_name):
     """
@@ -303,41 +285,6 @@ def evaluate_statement(onto, subject_name, property_name, object_name):
 
     # Check if the logical statement is true (if the object exists in the property of the subject)
     return object_ in property_[subject]
-
-def generate_and_evaluate_statements_old(onto):
-    """
-    Generates all possible logical statements and evaluates if they are true or false.
-    """
-    true_statements = []
-    false_statements = []
-    elements = get_all_elements(onto)
-
-    # Iterate over each object property
-    for prop in elements['properties']:
-        # Get the domains and ranges of the property
-        domains = prop.domain
-        ranges = prop.range
-
-        # Iterate over all individuals as possible subjects and objects
-        for subject in elements['individuals']:
-            for object_ in elements['individuals']:
-                # Check if the individual's type matches the domain and range
-                if any(isinstance(subject, domain) for domain in domains) and any(isinstance(object_, range_) for range_ in ranges):
-                    # Create a logical statement
-                    statement = f"{subject.name}.{prop.name}({object_.name})"
-                    
-                    # Evaluate the statement
-                    is_true = evaluate_statement(onto, subject.name, prop.name, object_.name)
-                    
-                    # Add the statement to the appropriate list
-                    if is_true:
-                        true_statements.append(statement)
-                    else:
-                        false_statements.append(statement)
-
-    return true_statements, false_statements
-
-
 
 #########################
 def generate_and_evaluate_statements(onto):
@@ -658,86 +605,6 @@ def main(ontology_path):
     model, vectorizer = modelizer(onto)
     return onto, model, vectorizer
 
-# Function to handle evaluation and response generation with ontology
-def handle_evaluation_with_ontology_old(user_input,statement, ontology_path=None):
-    print("handle_evaluation_with_ontology")
-    # Use the default ontology if no custom ontology is provided
-    if ontology_path is None:
-        ontology_path = "engine_ontology.owl"  # Default ontology path
-
-    # Load the ontology using the provided or default path
-    onto, model, vectorizer = main(ontology_path)
-    logical_form = convert_to_logical(statement, model, vectorizer)
-    
-    result, reason = check_statement_with_details(onto, logical_form)
-    evaluation_results = generate_evaluation_results(statement, logical_form, result, reason)
-
-    if result:
-        # True statements
-        print("---- True Statement ----")
-        print("evaluation_results:", evaluation_results)        
-        # Extract ontology information dynamically
-        ontology_info = get_ontology_info(onto)
-        # Create dynamic LLM prompt
-        llm_context = f"""
-        User input:
-        {user_input}
-        Ontology input:
-        {ontology_info}
-        {evaluation_results}
-        Statement:
-        {statement}
-        Logical statement:
-        """
-        prompt_template = """
-        Given the ontology information and the evaluation results, 
-        please provide the statements and logical statements that answer the user input based on the context.
-        Context:
-        {context}
-        Statements:
-        Logical statements:
-        """
-        # Fill the prompt template with the context
-        prompt = PromptTemplate(input_variables=["context"], template=prompt_template)
-        filled_prompt = prompt.format(context=llm_context)
-        print("------------prompt to WatsonX for True Statement-----------",filled_prompt)
-        # Generate a new correct statement using WatsonxLLM
-        response = ask_watsonx(filled_prompt)
-    else:
-        # False statements
-        print("---- False Statement ----")
-        print("evaluation_results:", evaluation_results)
-        
-        # Extract ontology information dynamically
-        ontology_info = get_ontology_info(onto)
-        
-        # Create dynamic LLM prompt
-        llm_context = f"""
-        User input:
-        {user_input}
-        Ontology input:
-        {ontology_info}
-        {evaluation_results}
-        """
-        
-        prompt_template = """
-        Given the ontology information and the evaluation results, 
-        if the input statement provided is false, 
-        please provide all correct statements and logical statements that answer the user input based on the context.
-        Context:
-        {context}
-        Statements:
-        Logical statements:
-        """
-        # Fill the prompt template with the context
-        prompt = PromptTemplate(input_variables=["context"], template=prompt_template)
-        filled_prompt = prompt.format(context=llm_context)
-        print("------------prompt to WatsonX for False Statement-----------",filled_prompt)
-        # Generate a new correct statement using WatsonxLLM
-        response = ask_watsonx(filled_prompt)
-
-    return response
-import re
 
 
 import re
@@ -1086,28 +953,7 @@ def handle_evaluation_without_ontology_clean(statement):
     return response
 
 
-def handle_evaluation_without_ontology_old(statement):
-    print("handle_evaluation_without_ontology") 
-    prompt_template = """
-    You are a helpful and friendly AI assistant. 
-    
-    You will give a single statement of the causes of failures 
-    based on the context that I will provide.  Just choose one statement.
-    If you do not know the answer to a question, please be honest and say "I don't know" or "I don't have enough information to answer that."    
-    I will provide context about causes of failures of a machines.
-    context:
-    Statement: Battery causes failure of oil engine
-    Statement: Oil pump causes failure of electric engine
-    Statement: Piston causes failure of electric engine
-    User Question:
-    {statement}
-    Assistant:
-    """
-    prompt = PromptTemplate(input_variables=["statement"], template=prompt_template)
-    filled_prompt = prompt.format(statement=statement)
-    print("------------prompt to WatsonX without Ontology-----------", filled_prompt)
-    response = ask_watsonx(filled_prompt)
-    return response
+
 def handle_evaluation_without_ontology_vecchio(statement):
     print("handle_evaluation_without_ontology") 
     prompt_template = """
@@ -1179,18 +1025,6 @@ def handle_evaluation_without_ontology(statement):
     return json.dumps(formatted_response)
 
 
-
-# Unified function to handle evaluation based on ontology flag
-def handle_evaluation_old(statement, use_ontology, ontology_path=None):
-    if use_ontology:
-        print("statement:", statement)
-        answer_llm = handle_evaluation_without_ontology(statement)
-     
-        return handle_evaluation_with_ontology(statement,answer_llm, ontology_path)
-    else:
-        print("statement:", statement)
-        return handle_evaluation_without_ontology(statement)
-    
 import json
 
 ground_false:{
