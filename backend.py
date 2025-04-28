@@ -1193,6 +1193,16 @@ def handle_evaluation_old(statement, use_ontology, ontology_path=None):
     
 import json
 
+ground_false:{
+"Battery causes failure of oil engine.",
+"Oil pump causes failure of electric engine.",
+"Piston causes failure of electric engine.",
+"Piston does not cause failure of oil engine.",
+"Oil pump does not cause failure of oil engine.",
+"Battery does not cause failure of electric engine.",
+"Motor does not cause failure of electric engine.",
+}
+
 # Unified function to handle evaluation based on ontology flag
 def handle_evaluation(statement, use_ontology, ontology_path=None):
     if use_ontology:
